@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0a0a1a">
+<title>Mis Apuestas · Mundial 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #00e07a;
+  --green-dim: #00a857;
+  --red: #ff4757;
+  --red-dim: #cc2233;
+  --gold: #ffd700;
+  --blue: #4a90e2;
+  --surface: #12122a;
+  --surface2: #1a1a38;
+  --surface3: #232346;
+  --border: rgba(255,255,255,0.08);
+  --text: #f0f0ff;
+  --text2: rgba(240,240,255,0.55);
+  --text3: rgba(240,240,255,0.35);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#0a0a1a;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;overscroll-behavior:none}
+
+/* ---- HEADER ---- */
+.header{
+  background:linear-gradient(160deg,#1a0a40 0%,#0a0a28 60%,#0a1a10 100%);
+  padding:28px 20px 24px;
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 0%,rgba(0,224,122,0.12) 0%,transparent 60%),
+             radial-gradient(ellipse at 10% 100%,rgba(74,144,226,0.1) 0%,transparent 50%);
+}
+.header-inner{position:relative;z-index:1;max-width:480px;margin:0 auto}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:36px;height:36px;background:var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand-name{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.brand-name span{color:var(--green)}
+.date-badge{font-size:11px;color:var(--text2);background:rgba(255,255,255,0.07);padding:5px 10px;border-radius:20px;border:0.5px solid var(--border)}
+
+/* Balance hero */
+.balance-hero{text-align:center;padding:4px 0 8px}
+.balance-label{font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:10px}
+.balance-amount{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:6px;transition:color .3s}
+.balance-amount.pos{color:var(--green)}
+.balance-amount.neg{color:var(--red)}
+.balance-amount.zero{color:var(--text2)}
+.balance-sub{font-size:13px;color:var(--text2)}
+
+/* ---- MINI CARDS ---- */
+.main{max-width:480px;margin:0 auto;padding:0 16px 100px}
+.mini-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:-16px 0 20px;padding:0}
+.mini-card{background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 10px;text-align:center}
+.mini-card .lbl{font-size:10px;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.mini-card .val{font-size:15px;font-weight:600;font-family:'Space Grotesk',sans-serif}
+.val-green{color:var(--green)}
+.val-red{color:var(--red)}
+.val-blue{color:#7ab8ff}
+
+/* ---- FORM ---- */
+.section{background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.section-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.si-green{background:rgba(0,224,122,0.15)}
+.si-blue{background:rgba(74,144,226,0.15)}
+.section-title{font-size:14px;font-weight:600;color:var(--text)}
+
+.type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.type-btn{border:1.5px solid var(--border);background:transparent;color:var(--text2);padding:10px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.type-btn.active-dep{background:rgba(255,71,87,0.15);border-color:var(--red);color:var(--red)}
+.type-btn.active-ret{background:rgba(0,224,122,0.15);border-color:var(--green);color:var(--green)}
+.type-btn:hover{border-color:rgba(255,255,255,0.25);color:var(--text)}
+
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.inp-group{display:flex;flex-direction:column;gap:5px}
+.inp-group label{font-size:11px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;color:var(--text3)}
+input[type=number],input[type=text]{
+  background:var(--surface3);border:0.5px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius-sm);padding:10px 12px;font-size:15px;
+  color:var(--text);font-family:'Inter',sans-serif;width:100%;
+  -webkit-appearance:none;
+}
+input[type=number]:focus,input[type=text]:focus{outline:none;border-color:rgba(0,224,122,0.5);background:var(--surface3)}
+input::placeholder{color:var(--text3)}
+
+.inp-full{margin-bottom:12px}
+.inp-full input{width:100%}
+
+.add-btn{
+  width:100%;padding:13px;background:var(--green);color:#0a0a1a;
+  border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:700;
+  font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;gap:8px;transition:all .15s;
+}
+.add-btn:active{transform:scale(0.97);background:var(--green-dim)}
+
+/* ---- HISTORIAL ---- */
+.empty-state{text-align:center;padding:28px 0;color:var(--text3);font-size:14px}
+.empty-icon{font-size:36px;margin-bottom:8px}
+
+.mov-list{display:flex;flex-direction:column;gap:8px}
+.mov-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface3);border-radius:var(--radius-sm);
+  padding:12px 14px;border-left:3px solid transparent;position:relative;
+}
+.mov-item.dep{border-left-color:var(--red)}
+.mov-item.ret{border-left-color:var(--green)}
+.mov-dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.dep .mov-dot{background:rgba(255,71,87,0.15)}
+.ret .mov-dot{background:rgba(0,224,122,0.15)}
+.mov-info{flex:1;min-width:0}
+.mov-nota{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mov-meta{font-size:11px;color:var(--text3);margin-top:2px}
+.mov-amount{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;text-align:right;flex-shrink:0}
+.dep .mov-amount{color:var(--red)}
+.ret .mov-amount{color:var(--green)}
+.mov-del{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;margin-left:6px;font-size:17px;line-height:1;border-radius:4px;flex-shrink:0}
+.mov-del:active{color:var(--red)}
+
+/* ---- CHART ---- */
+.chart-wrap{height:180px;position:relative;margin-top:4px}
+
+/* ---- BOTTOM NAV ---- */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(10,10,26,0.95);
+  border-top:0.5px solid var(--border);
+  padding:10px 24px 20px;
+  display:flex;gap:10px;
+  backdrop-filter:blur(12px);
+  z-index:100;
+  max-width:480px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%;
+}
+.bottom-nav .add-btn{flex:1}
+.clear-btn{
+  padding:13px 14px;background:rgba(255,71,87,0.12);color:var(--red);
+  border:0.5px solid rgba(255,71,87,0.3);border-radius:var(--radius-sm);
+  font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;
+  white-space:nowrap;transition:all .15s;
+}
+.clear-btn:active{transform:scale(0.97)}
+
+/* ---- TOAST ---- */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);
+  background:var(--surface3);border:0.5px solid var(--border);
+  border-radius:20px;padding:10px 20px;font-size:13px;font-weight:500;
+  z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;color:var(--text);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-icon">⚽</div>
+        <div class="brand-name">Apuestas <span>2026</span></div>
+      </div>
+      <div class="date-badge" id="date-badge">Mundial · USA/CAN/MEX</div>
+    </div>
+    <div class="balance-hero">
+      <div class="balance-label">Ganancia / Pérdida</div>
+      <div class="balance-amount zero" id="balance-hero">$0</div>
+      <div class="balance-sub" id="balance-sub">Sin movimientos aún</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="mini-cards">
+    <div class="mini-card">
+      <div class="lbl">Depositado</div>
+      <div class="val val-red" id="mc-dep">$0</div>
+    </div>
+    <div class="mini-card">
+      <div class="lbl">Retirado</div>
+      <div class="val val-green" id="mc-ret">$0</div>
+    </div>
+    <div class="mini-card">
+      <div class="lbl">Apuestas</div>
+      <div class="val val-blue" id="mc-count">0</div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-green">➕</div>
+      <div class="section-title">Nuevo movimiento</div>
+    </div>
+    <div class="type-toggle">
+      <button class="type-btn active-dep" id="btn-dep" onclick="setTipo('deposito')">💸 Depósito</button>
+      <button class="type-btn" id="btn-ret" onclick="setTipo('retiro')">🏆 Retiro</button>
+    </div>
+    <div class="inp-row">
+      <div class="inp-group">
+        <label>Monto ($)</label>
+        <input type="number" id="monto" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+      </div>
+      <div class="inp-group">
+        <label>Fecha</label>
+        <input type="text" id="fecha-inp" placeholder="hoy" readonly style="cursor:default">
+      </div>
+    </div>
+    <div class="inp-full">
+      <div class="inp-group">
+        <label>Partido / Nota</label>
+        <input type="text" id="nota" placeholder="Ej: Argentina vs Brasil – QF">
+      </div>
+    </div>
+    <button class="add-btn" id="main-add-btn" onclick="agregar()">
+      <span>➕</span> Agregar depósito
+    </button>
+  </div>
+
+  <!-- CHART -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon si-blue">📈</div>
+      <div class="section-title">Evolución del balance</div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="lineChart" role="img" aria-label="Evolución del balance en el tiempo"></canvas>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="section" id="section-hist">
+    <div class="section-header">
+      <div class="section-icon si-blue">🕒</div>
+      <div class="section-title">Historial</div>
+    </div>
+    <div id="mov-list-wrap"></div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button class="add-btn" onclick="scrollToForm()">⚡ Agregar movimiento</button>
+  <button class="clear-btn" onclick="clearAll()">🗑 Limpiar</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let movs = [];
+let tipo = 'deposito';
+let chart = null;
+
+const DB_KEY = 'mundial2026_movs';
+
+function loadData() {
+  try { movs = JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch(e) { movs = []; }
+}
+function saveData() {
+  try { localStorage.setItem(DB_KEY, JSON.stringify(movs)); } catch(e) {}
+}
+
+function setTipo(t) {
+  tipo = t;
+  document.getElementById('btn-dep').className = 'type-btn ' + (t==='deposito'?'active-dep':'');
+  document.getElementById('btn-ret').className = 'type-btn ' + (t==='retiro'?'active-ret':'');
+  document.getElementById('main-add-btn').innerHTML = t==='deposito'
+    ? '<span>💸</span> Agregar depósito'
+    : '<span>🏆</span> Agregar retiro';
+}
+
+function agregar() {
+  const monto = parseFloat(document.getElementById('monto').value);
+  const nota = document.getElementById('nota').value.trim();
+  if (!monto || monto <= 0) { showToast('⚠️ Ingresa un monto válido'); return; }
+  movs.push({
+    id: Date.now(), tipo, monto,
+    nota: nota || (tipo==='deposito'?'Depósito':'Retiro'),
+    fecha: new Date().toLocaleDateString('es-CL', {day:'2-digit',month:'short'})
+  });
+  document.getElementById('monto').value = '';
+  document.getElementById('nota').value = '';
+  saveData();
+  render();
+  showToast(tipo==='deposito' ? '💸 Depósito registrado' : '🏆 Retiro registrado');
+}
+
+function eliminar(id) {
+  movs = movs.filter(m => m.id !== id);
+  saveData();
+  render();
+  showToast('🗑 Movimiento eliminado');
+}
+
+function clearAll() {
+  if (!movs.length) return;
+  if (confirm('¿Borrar todo el historial?')) {
+    movs = [];
+    saveData();
+    render();
+    showToast('🗑 Historial borrado');
+  }
+}
+
+function fmt(n, sign=false) {
+  const abs = Math.abs(n).toLocaleString('es-CL', {minimumFractionDigits:2,maximumFractionDigits:2});
+  if (sign) return (n >= 0 ? '+' : '-') + '$' + abs;
+  return '$' + abs;
+}
+
+function render() {
+  const dep = movs.filter(m=>m.tipo==='deposito').reduce((a,m)=>a+m.monto,0);
+  const ret = movs.filter(m=>m.tipo==='retiro').reduce((a,m)=>a+m.monto,0);
+  const bal = ret - dep;
+
+  document.getElementById('mc-dep').textContent = fmt(dep);
+  document.getElementById('mc-ret').textContent = fmt(ret);
+  document.getElementById('mc-count').textContent = movs.length;
+
+  const hero = document.getElementById('balance-hero');
+  hero.textContent = fmt(Math.abs(bal));
+  hero.className = 'balance-amount ' + (bal > 0 ? 'pos' : bal < 0 ? 'neg' : 'zero');
+
+  const sub = document.getElementById('balance-sub');
+  if (!movs.length) sub.textContent = 'Sin movimientos aún';
+  else if (bal > 0) sub.textContent = `🔥 ¡Vas ganando ${fmt(bal)}!`;
+  else if (bal < 0) sub.textContent = `📉 Vas ${fmt(Math.abs(bal))} en rojo`;
+  else sub.textContent = 'Ni ganando ni perdiendo';
+
+  // Historial
+  const wrap = document.getElementById('mov-list-wrap');
+  if (!movs.length) {
+    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">⚽</div>Sin movimientos aún.<br>Agrega tu primer depósito.</div>';
+  } else {
+    wrap.innerHTML = '<div class="mov-list">' + [...movs].reverse().map(m => {
+      const isD = m.tipo === 'deposito';
+      return `<div class="mov-item ${isD?'dep':'ret'}">
+        <div class="mov-dot">${isD?'💸':'🏆'}</div>
+        <div class="mov-info">
+          <div class="mov-nota">${escHtml(m.nota)}</div>
+          <div class="mov-meta">${m.fecha} · ${isD?'Depósito':'Retiro'}</div>
+        </div>
+        <div class="mov-amount">${isD?'-':'+'}${fmt(m.monto)}</div>
+        <button class="mov-del" onclick="eliminar(${m.id})" aria-label="Eliminar">×</button>
+      </div>`;
+    }).join('') + '</div>';
+  }
+
+  renderChart(bal);
+}
+
+function renderChart(bal) {
+  const labels = [];
+  const data = [];
+  let running = 0;
+  movs.forEach((m,i) => {
+    running += m.tipo === 'retiro' ? m.monto : -m.monto;
+    labels.push('#' + (i+1));
+    data.push(parseFloat(running.toFixed(2)));
+  });
+
+  const ctx = document.getElementById('lineChart').getContext('2d');
+  if (chart) { chart.destroy(); chart = null; }
+  if (movs.length < 1) return;
+
+  const lastVal = data[data.length-1];
+  const lineColor = lastVal >= 0 ? '#00e07a' : '#ff4757';
+  const bgColor = lastVal >= 0 ? 'rgba(0,224,122,0.08)' : 'rgba(255,71,87,0.08)';
+
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Balance',
+        data,
+        borderColor: lineColor,
+        backgroundColor: bgColor,
+        fill: true,
+        tension: 0.4,
+        pointRadius: data.length < 20 ? 5 : 2,
+        pointBackgroundColor: data.map(v => v >= 0 ? '#00e07a' : '#ff4757'),
+        pointBorderColor: '#12122a',
+        pointBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: {
+        backgroundColor:'#1a1a38',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,
+        titleColor:'#f0f0ff',bodyColor:'#f0f0ff',
+        callbacks: { label: ctx => (ctx.raw<0?'-$':'+'+'$') + Math.abs(ctx.raw).toFixed(2) }
+      }},
+      scales: {
+        x: { ticks: { color:'rgba(240,240,255,0.35)',font:{size:10} }, grid: { color:'rgba(255,255,255,0.04)' } },
+        y: {
+          ticks: { color:'rgba(240,240,255,0.35)',font:{size:10}, callback: v => (v<0?'-$':'$')+Math.abs(v) },
+          grid: { color:'rgba(255,255,255,0.04)' }
+        }
+      }
+    }
+  });
+}
+
+function scrollToForm() {
+  document.querySelector('.section').scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('monto').focus();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function initDate() {
+  const d = new Date();
+  document.getElementById('fecha-inp').value = d.toLocaleDateString('es-CL',{day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('date-badge').textContent = d.toLocaleDateString('es-CL',{day:'2-digit',month:'long'}) + ' · Mundial 2026';
+}
+
+loadData();
+initDate();
+render();
+</script>
+</body>
+</html>
